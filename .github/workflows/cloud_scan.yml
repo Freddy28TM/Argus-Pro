@@ -1,0 +1,16 @@
+name: Argus-Pro Cloud Runner
+on: [workflow_dispatch] # Allows you to click "Run" from your phone/browser
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest # This is a full Linux computer in the cloud
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run Argus
+        run: |
+          pip install -r requirements.txt
+          python main.py --mode cloud # You can add a 'cloud' mode to main.py
