@@ -1,8 +1,10 @@
+bdev.oppo.com
+cloud-test.oppo.com
+d.theme.exapi.oppo.com
+exapi.oppo.com
 opsg-api-in.oppo.com
 opsg-payapi-in.oppo.com
-bdev.oppo.com
-i.theme.exapi.oppo.com
-ossapihd.oppo.com
-opss-api-sg.oppo.com
 opsiteapi-cn.oppo.com
-im-api.oppo.com
+opss-api-sg.oppo.com
+seebeyond-api.oppo.com
+theme.exapi.oppo.com
