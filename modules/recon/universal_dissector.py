@@ -1,16 +1,6 @@
 import socket
-import scapy.config
-from scapy.all import *
+import os
 from rich.console import Console
-
-# --- MOBILE PERMISSION FIX ---
-# This tells Scapy to use Layer 3 Raw Sockets which sometimes 
-# works better in Termux environments than Layer 2.
-try:
-    conf.L3socket = L3RawSocket
-except:
-    pass
-# -----------------------------
 
 console = Console()
 
@@ -19,21 +9,18 @@ class UniversalDissector:
         self.target = target
 
     def layer2_3_check(self):
-        """ARP and ICMP: Finding the hardware and network route."""
+        """Standard System Ping: Works without root on Android/Linux/Windows."""
         console.print("[bold cyan][L2/L3] Probing Network Path...[/bold cyan]")
-        conf.verb = 0
-        try:
-            # We use a standard ICMP ping if ARP (Layer 2) is blocked by Android
-            ans, unans = sr(IP(dst=self.target)/ICMP(), timeout=2, verbose=0)
-            if ans:
-                console.print(f"[green][+] Target {self.target} is UP and Responding[/green]")
-        except PermissionError:
-            console.print("[yellow][!] L2 Raw Sockets blocked. Skipping MAC discovery (Non-Root).[/yellow]")
+        # Using system ping to bypass Scapy raw socket restrictions
+        response = os.system(f"ping -c 1 -W 1 {self.target} > /dev/null 2>&1")
+        if response == 0:
+            console.print(f"[green][+] Target {self.target} is UP and Responding[/green]")
+        else:
+            console.print("[yellow][!] Target {self.target} not responding to ICMP.[/yellow]")
         
     def layer4_check(self, port):
-        """TCP/UDP: Checking the Transport Layer using Standard Sockets."""
+        """TCP: Checking the Transport Layer using Standard Sockets (No Root)."""
         try:
-            # Using socket.socket instead of Scapy for L4 to bypass PermissionError
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.settimeout(1)
             result = s.connect_ex((self.target, port))
@@ -53,7 +40,6 @@ class UniversalDissector:
         service = protocols.get(port, "Unknown Service")
         console.print(f"[bold yellow][L7] Port {port}: {service}[/bold yellow]")
         
-        # Banner Grabbing
         try:
             with socket.socket() as s:
                 s.settimeout(2)
@@ -64,7 +50,7 @@ class UniversalDissector:
         except:
             pass
 
-    def run_full_stack(self, ports=[21, 22, 80, 443, 8080]):
+    def run_full_stack(self, ports=[21, 22, 80, 443, 8080, 3306]):
         self.layer2_3_check()
         for p in ports:
             if self.layer4_check(p):
