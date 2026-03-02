@@ -1,0 +1,8 @@
+opsg-api-in.oppo.com
+opsg-payapi-in.oppo.com
+bdev.oppo.com
+i.theme.exapi.oppo.com
+ossapihd.oppo.com
+opss-api-sg.oppo.com
+opsiteapi-cn.oppo.com
+im-api.oppo.com
