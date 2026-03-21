@@ -1,0 +1,13 @@
+{
+  "main_brand": "OPPO",
+  "subsidiaries": [
+    "oppo.com",
+    "oppomobile.com",
+    "realme.com",
+    "oneplus.com",
+    "coloros.com",
+    "heytap.com",
+    "vivoglobal.com"
+  ],
+  "target_keywords": ["cloud-cn", "api-glb", "test-internal", "iot-platform"]
+}
